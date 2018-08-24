@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<table border="1" cellspacing="25">
+    <tr>
+        <td>
+            <h3>Update or Create User</h3>
+            <form action="#" method="post" th:action="@{/users/manage}" th:object="${user}">
+                <p>User Name: <input id="user-name-input" type="text" th:field="*{username}" required/></p>
+                <p>Password:<input id="user-password-input" type="text" th:field="*{password}"/></p>
+                <p>Email: <input id="user-email-input" type="text" th:field="*{mail}"/></p>
+                <div th:each="role : ${roles}">
+                    <input th:id="'role-' + ${role}" type="checkbox" th:field="*{authorities}" th:value="${role}"/>
+                    <label th:text="${role.getAuthority()}">"ROLES-CHECKBOXES</label>
+                </div>
+                <p><input type="checkbox" class="field-checkbox" id="user-is-account-non-expired-checkbox"
+                          th:field="*{accountNonExpired}">Account Non Expired</p>
+                <p><input type="checkbox" class="field-checkbox" id="user-is-account-non-locked-checkbox"
+                          th:field="*{accountNonLocked}">Account Non Locked</p>
+                <p><input type="checkbox" class="field-checkbox" id="user-is-credential-non-expired-checkbox"
+                          th:field="*{credentialsNonExpired}">Credential Non Expired</p>
+                <p><input type="checkbox" class="field-checkbox" id="user-is-enabled-checkbox" th:field="*{enabled}">Enabled
+                </p>
+                <p><input type="submit" value="Update Or Create"/></p>
+                <p>
+                    <button onclick=setInputToDefault()>Clear input field</button>
+                </p>
+            </form>
+        </td>
+        <td>
+            <h3>Exists Users</h3>
+            <div class=scrollable>
+                <table id="users-table" border="1">
+                    <tr>
+                        <th>User Id</th>
+                        <th>User name</th>
+                        <th>User password</th>
+                        <th>User mail</th>
+                        <th>Roles</th>
+                        <th>Account Non Expired</th>
+                        <th>Account Non Locked</th>
+                        <th>Credentials Non Expired</th>
+                        <th>Enable</th>
+                    </tr>
+                    <tr th:each="user : ${users}"
+                        th:onclick="'setDataFromTableToInputs(\'' + ${user.getId()} + '\');setAuthoritie(\'' + ${user.authorities} +'\',\''+ ${roles} +  '\')'">
+                        <td th:utext="${user.getId()}"
+                            th:id="'user-id-'+ ${user.getId()}">...</td>
+                        <td th:utext="${user.getUsername()}"
+                            th:id="'user-name-'+ ${user.getId()}">...</td>
+                        <td th:utext="${user.getPassword()}"
+                            th:id="'user-password-'+ ${user.getId()}">...</td>
+                        <td th:utext="${user.getMail()}"
+                            th:id="'user-email-'+ ${user.getId()}">...</td>
+                        <td th:utext="${user.getAuthorities()}">...</td>
+                        <td th:utext="${user.isAccountNonExpired()}"
+                            th:id="'user-is-account-non-expired-'+ ${user.getId()}">...</td>
+                        <td th:utext="${user.isAccountNonLocked()}"
+                            th:id="'user-is-account-non-locked-'+ ${user.getId()}">...</td>
+                        <td th:utext="${user.isCredentialsNonExpired()}"
+                            th:id="'user-is-credential-non-expired-'+ ${user.getId()}">...</td>
+                        <td th:utext="${user.isEnabled()}"
+                            th:id="'user-is-enabled-'+ ${user.getId()}">...</td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
+<script>
+    function setDataFromTableToInputs(value) {
+        document.getElementById("user-name-input")
+            .value = getInnerHtmlById("user-name-" + value);
+        document.getElementById("user-email-input")
+            .value = getInnerHtmlById("user-email-" + value);
+        document.getElementById("user-is-account-non-expired-checkbox")
+            .checked = getBooleanValueFromTextById("user-is-account-non-expired-" + value);
+        document.getElementById("user-is-account-non-locked-checkbox")
+            .checked = getBooleanValueFromTextById("user-is-account-non-locked-" + value);
+        document.getElementById("user-is-credential-non-expired-checkbox")
+            .checked = getBooleanValueFromTextById("user-is-credential-non-expired-" + value);
+        document.getElementById("user-is-enabled-checkbox")
+            .checked = getBooleanValueFromTextById("user-is-enabled-" + value);
+    }
+
+    function setAuthoritie(userRoles, allRoles) {
+        var allRolesArray = charArrayToStringArray(allRoles);
+        var userRolesArray = charArrayToStringArray(userRoles);
+        for (var i = 0; i < allRolesArray.length; i++) {
+            document.getElementById("role-" + allRolesArray[i]).checked = userRolesArray.includes(allRolesArray[i]);
+        }
+
+    }
+
+    function charArrayToStringArray(array) {
+        return array.toString().replace('[', '').replace(']', '').replace(' ', '').split(',');
+    }
+
+    function setInputToDefault() {
+        document.getElementById("user-name-input").value = '';
+        document.getElementById("user-password-input").value = '';
+        document.getElementById("user-email-input").value = '';
+        document.getElementById("user-is-account-non-expired-checkbox").checked = true;
+        document.getElementById("user-is-account-non-locked-checkbox").checked = true;
+        document.getElementById("user-is-credential-non-expired-checkbox").checked = true;
+        document.getElementById("user-is-enabled-checkbox").checked = true;
+        document.getElementById("user-is-deleted-checkbox").checked = false;
+    }
+
+
+    function getBooleanValueFromTextById(id) {
+        var text = document.getElementById(id).innerHTML;
+        switch (text.trim()) {
+            case "true":
+                return true;
+            case "false":
+                return false;
+        }
+    }
+
+    function getInnerHtmlById(id) {
+        return document.getElementById(id).innerHTML
+    }
+</script>
+</body>
+
+<style>
+    td, th {
+        vertical-align: top;
+    }
+
+    div.scrollable {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+        align-content: start;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    /* Full-width input fields */
+    input[type=text], input[type=password] {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    td {
+        border: 1px #DDD solid;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .field-checkbox {
+        margin-bottom: 15px
+    }
+
+</style>
+</html>
