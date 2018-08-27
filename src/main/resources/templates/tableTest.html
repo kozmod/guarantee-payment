@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h3>Exists Users</h3>
+<!--<form th:object="${users}">-->
+    <!--<div class=scrollable>-->
+        <!--<table id="users-table">-->
+            <!--<tr>-->
+                <!--<th>User Id</th>-->
+                <!--<th>User name</th>-->
+                <!--<th>User password</th>-->
+                <!--<th>User mail</th>-->
+                <!--<th>Roles</th>-->
+                <!--<th>Account Non Expired</th>-->
+                <!--<th>Account Non Locked</th>-->
+                <!--<th>Credentials Non Expired</th>-->
+                <!--<th>Enable</th>-->
+            <!--</tr>-->
+            <!--<tr th:each="user : ${users}"-->
+                <!--th:onclick="'setDataFromTableToInputs(\'' + ${user.getId()} + '\');setAuthoritie(\'' + ${user.authorities} +'\',\''+ ${roles} +  '\')'">-->
+                <!--<td th:utext="${user.getId()}"-->
+                    <!--th:id="'user-id-'+ ${user.getId()}">...-->
+                <!--</td>-->
+                <!--<td th:utext="${user.getUsername()}"-->
+                    <!--th:id="'user-name-'+ ${user.getId()}">...-->
+                <!--</td>-->
+                <!--<td th:utext="${user.getPassword()}"-->
+                    <!--th:id="'user-password-'+ ${user.getId()}">...-->
+                <!--</td>-->
+                <!--<td th:utext="${user.getMail()}"-->
+                    <!--th:id="'user-email-'+ ${user.getId()}">...-->
+                <!--</td>-->
+                <!--<td th:utext="${user.getAuthorities()}">...</td>-->
+                <!--<td th:utext="${user.isAccountNonExpired()}"-->
+                    <!--th:id="'user-is-account-non-expired-'+ ${user.getId()}">...-->
+                <!--</td>-->
+                <!--<td th:utext="${user.isAccountNonLocked()}"-->
+                    <!--th:id="'user-is-account-non-locked-'+ ${user.getId()}">...-->
+                <!--</td>-->
+                <!--<td th:utext="${user.isCredentialsNonExpired()}"-->
+                    <!--th:id="'user-is-credential-non-expired-'+ ${user.getId()}">...-->
+                <!--</td>-->
+                <!--<td th:utext="${user.isEnabled()}"-->
+                    <!--th:id="'user-is-enabled-'+ ${user.getId()}">...-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</div>-->
+<!--</form>-->
+
+<form action="#" th:action="@{/}" th:object="${dto}" method="post">
+    <fieldset>
+        <input type="submit" id="submitButton" th:value="Save">
+        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
+        <table id="myTable">
+            <tbody>
+            <tr th:each="user, itemStat : *{users}">
+                <td><input th:field="*{users[__${itemStat.index}__].username}" /></td>
+                <td><input th:field="*{users[__${itemStat.index}__].id}" /></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</form>
+<button onclick="myFunction()">Try it</button>
+<script>
+    function myFunction() {
+        document.getElementById("myTable").deleteRow(0);
+    }
+</script>
+</body>
+</html>

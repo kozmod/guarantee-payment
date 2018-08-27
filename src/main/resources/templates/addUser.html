@@ -18,10 +18,10 @@
                 <p><input type="checkbox" class="field-checkbox" id="user-is-account-non-locked-checkbox"
                           th:field="*{accountNonLocked}">Account Non Locked</p>
                 <p><input type="checkbox" class="field-checkbox" id="user-is-credential-non-expired-checkbox"
-                          th:field="*{credentialsNonExpired}">Credential Non Expired</p>
-                <p><input type="checkbox" class="field-checkbox" id="user-is-enabled-checkbox" th:field="*{enabled}">Enabled
+                          th:field="*{credentialsNonExpired}" >Credential Non Expired</p>
+                <input type="checkbox" class="field-checkbox" id="user-is-enabled-checkbox" th:field="*{enabled}">Enabled
                 </p>
-                <p><input type="submit" value="Update Or Create"/></p>
+                <p><input type="submit" name="action" value="Update or Create"/></p>
                 <p>
                     <button onclick=setInputToDefault()>Clear input field</button>
                 </p>
@@ -29,50 +29,71 @@
         </td>
         <td>
             <h3>Exists Users</h3>
-            <div class=scrollable>
-                <table id="users-table" border="1">
-                    <tr>
-                        <th>User Id</th>
-                        <th>User name</th>
-                        <th>User password</th>
-                        <th>User mail</th>
-                        <th>Roles</th>
-                        <th>Account Non Expired</th>
-                        <th>Account Non Locked</th>
-                        <th>Credentials Non Expired</th>
-                        <th>Enable</th>
-                    </tr>
-                    <tr th:each="user : ${users}"
-                        th:onclick="'setDataFromTableToInputs(\'' + ${user.getId()} + '\');setAuthoritie(\'' + ${user.authorities} +'\',\''+ ${roles} +  '\')'">
-                        <td th:utext="${user.getId()}"
-                            th:id="'user-id-'+ ${user.getId()}">...</td>
-                        <td th:utext="${user.getUsername()}"
-                            th:id="'user-name-'+ ${user.getId()}">...</td>
-                        <td th:utext="${user.getPassword()}"
-                            th:id="'user-password-'+ ${user.getId()}">...</td>
-                        <td th:utext="${user.getMail()}"
-                            th:id="'user-email-'+ ${user.getId()}">...</td>
-                        <td th:utext="${user.getAuthorities()}">...</td>
-                        <td th:utext="${user.isAccountNonExpired()}"
-                            th:id="'user-is-account-non-expired-'+ ${user.getId()}">...</td>
-                        <td th:utext="${user.isAccountNonLocked()}"
-                            th:id="'user-is-account-non-locked-'+ ${user.getId()}">...</td>
-                        <td th:utext="${user.isCredentialsNonExpired()}"
-                            th:id="'user-is-credential-non-expired-'+ ${user.getId()}">...</td>
-                        <td th:utext="${user.isEnabled()}"
-                            th:id="'user-is-enabled-'+ ${user.getId()}">...</td>
-                    </tr>
-                </table>
-            </div>
+            <form action="#" th:action="@{/users/manage}" th:object="${usersDto}" method="post">
+                <input type="submit" id="delete-selected-users-button" name="action" value="Delete selected users">
+                <div class=scrollable>
+                    <table id="users-table" border="1">
+                        <tr>
+                            <th>User Id</th>
+                            <th>User name</th>
+                            <th>User mail</th>
+                            <th>Roles</th>
+                            <th>Account Non Expired</th>
+                            <th>Account Non Locked</th>
+                            <th>Credentials Non Expired</th>
+                            <th>Enable</th>
+                        </tr>
+                        <tr th:each="user, userStat : *{users}"
+                            th:onclick="'setDataFromTableToInputs(\'' + ${user.getId()} + '\');setAuthoritie(\'' + ${user.authorities} +'\',\''+ ${roles} +  '\')'">
+                            <td>
+                                <input th:id="'user-id-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].id}"
+                                       class="user-table-td-input" readonly/>
+                            </td>
+                            <td >
+                                <input th:id="'user-name-'+ ${user.getId()}"  th:field="*{users[__${userStat.index}__].username}"
+                                       class="user-table-td-input" readonly/>
+                            </td>
+                            <td>
+                                <input th:id="'user-email-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].mail}"
+                                       class="user-table-td-input" readonly/>
+                            </td>
+                            <td >
+                                <input th:field="*{users[__${userStat.index}__].authorities}"
+                                       class="user-table-td-input" readonly/>
+                            </td>
+                            <td>
+                                <input th:id="'user-is-account-non-expired-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].accountNonExpired}"
+                                       class="user-table-td-input" readonly/>
+                            </td>
+                            <td >
+                                <input th:id="'user-is-account-non-locked-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].accountNonLocked}"
+                                       class="user-table-td-input" readonly/>
+                            </td>
+                            <td>
+                                <input th:id="'user-is-credential-non-expired-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].credentialsNonExpired}"
+                                       class="user-table-td-input" readonly/>
+                            </td>
+                            <td >
+                                <input th:id="'user-is-enabled-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].enabled}"
+                                       class="user-table-td-input" readonly/>
+                            </td>
+                            <td >
+                                <input type="checkbox" th:field="*{users[__${userStat.index}__].del}"
+                                       class="user-table-td-input"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
         </td>
     </tr>
 </table>
 <script>
     function setDataFromTableToInputs(value) {
         document.getElementById("user-name-input")
-            .value = getInnerHtmlById("user-name-" + value);
+            .value = getValuelById("user-name-" + value);
         document.getElementById("user-email-input")
-            .value = getInnerHtmlById("user-email-" + value);
+            .value = getValuelById("user-email-" + value);
         document.getElementById("user-is-account-non-expired-checkbox")
             .checked = getBooleanValueFromTextById("user-is-account-non-expired-" + value);
         document.getElementById("user-is-account-non-locked-checkbox")
@@ -109,7 +130,7 @@
 
 
     function getBooleanValueFromTextById(id) {
-        var text = document.getElementById(id).innerHTML;
+        var text = document.getElementById(id).value;
         switch (text.trim()) {
             case "true":
                 return true;
@@ -118,8 +139,8 @@
         }
     }
 
-    function getInnerHtmlById(id) {
-        return document.getElementById(id).innerHTML
+    function getValuelById(id) {
+        return document.getElementById(id).value
     }
 </script>
 </body>
@@ -127,6 +148,10 @@
 <style>
     td, th {
         vertical-align: top;
+    }
+    .user-table-td-input{
+        background:rgba(0,0,0,0);
+        border:none;
     }
 
     div.scrollable {

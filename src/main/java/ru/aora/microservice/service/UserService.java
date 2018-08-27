@@ -8,11 +8,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.aora.microservice.entity.ActionResult;
 import ru.aora.microservice.entity.user.User;
+import ru.aora.microservice.entity.user.UsersDto;
 import ru.aora.microservice.entity.user.UserRole;
 import ru.aora.microservice.repositorie.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -51,11 +54,20 @@ public class UserService implements UserDetailsService {
                             "User created"
                     );
                 });
+    }
 
+    public void deleteAllBySelected(final UsersDto userDto) {
+        if(Objects.nonNull(userDto)){
+           List<User> usersToDelete = userDto.getUsers().stream()
+                    .filter(User::isDel)
+                    .collect(Collectors.toList());
+           if(!usersToDelete.isEmpty()){
+               userRepository.deleteAll(usersToDelete);
+           }
+        }
     }
 
     public User emptyUser(){
-        System.out.println(UserRole.valueOf("USER"));
                 return User.builder()
                 .withAccountNonExpired(true)
                 .withAccountNonLocked(true)
@@ -64,15 +76,15 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    public UsersDto usersDto(){
+        return new UsersDto(userRepository.findAll());
+    }
+
 
     public List<UserRole> allRoles(){
         return Arrays.asList(UserRole.values())  ;
     }
 
-
-    public UserRepository userRepository() {
-        return userRepository;
-    }
 
     private void encodeUserPassword(User user) {
         user.setPassword(

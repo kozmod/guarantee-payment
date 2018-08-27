@@ -11,7 +11,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.aora.microservice.entity.user.UserRole;
 import ru.aora.microservice.service.UserService;
 
-import static ru.aora.microservice.controller.UserController.UPDATE_OR_CREATE_MAPPING;
+import static ru.aora.microservice.controller.UserController.GET_USERS_MAPPING;
 
 @Configuration
 @EnableWebSecurity
@@ -35,11 +35,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(UPDATE_OR_CREATE_MAPPING).hasAnyAuthority(UserRole.ADMIN.getAuthority())
+                .antMatchers(GET_USERS_MAPPING).hasAnyAuthority(UserRole.ADMIN.getAuthority())
                 .antMatchers("/**").hasAnyAuthority(UserRole.USER.getAuthority(), UserRole.ADMIN.getAuthority())
+//                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().permitAll().defaultSuccessUrl("/")
+                .formLogin().permitAll()
+//                .defaultSuccessUrl("/")
+                .defaultSuccessUrl(GET_USERS_MAPPING)
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
     }

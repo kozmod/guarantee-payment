@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Collection;
 
 @Entity
@@ -51,6 +52,9 @@ public class User implements UserDetails {
 
     @Column(name = "mail", nullable = false)
     private String mail;
+
+    @Transient
+    private boolean del;
 
     public int getId() {
         return id;
@@ -130,7 +134,13 @@ public class User implements UserDetails {
         this.mail = mail;
     }
 
+    public boolean isDel() {
+        return del;
+    }
 
+    public void setDel(boolean del) {
+        this.del = del;
+    }
 
     public static UserBuilder builder() {
         return new UserBuilder();
@@ -146,6 +156,7 @@ public class User implements UserDetails {
         private String username;
         private String password;
         private String mail;
+        private boolean del;
 
         private UserBuilder() {
         }
@@ -195,6 +206,11 @@ public class User implements UserDetails {
             return this;
         }
 
+        public UserBuilder withDel(boolean del) {
+            this.del = del;
+            return this;
+        }
+
         public User build() {
             User user = new User();
             user.setId(id);
@@ -206,6 +222,7 @@ public class User implements UserDetails {
             user.setUsername(username);
             user.setPassword(password);
             user.setMail(mail);
+            user.setDel(del);
             return user;
         }
     }
@@ -222,7 +239,7 @@ public class User implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", mail='" + mail + '\'' +
+                ", del=" + del +
                 '}';
     }
-
 }
