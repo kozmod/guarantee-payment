@@ -88,6 +88,67 @@
         </td>
     </tr>
 </table>
+<!-- Переделал таблицу с дивами (нам пока поля необходимо мапить на инпуты - их надо сделать совершенно не примечательными,
+ те такими чтоб пользователь не видел разницу между ячейками и инпутами. Рскоментируй и увидишь что работает-->
+<!--<div>-->
+    <!--<h3>Exists Users</h3>-->
+    <!--<form action="#" th:action="@{/users/manage}" th:object="${usersDto}" method="post">-->
+        <!--<input type="submit" id="delete-selected-users-button-2" name="action" value="Delete selected users 2">-->
+        <!--<div class=scrollable>-->
+            <!--<div>-->
+                <!--<div>-->
+                    <!--<div>User Id</div>-->
+                    <!--<div>User name</div>-->
+                    <!--<div>User mail</div>-->
+                    <!--<div>Roles</div>-->
+                    <!--<div>Account Non Expired</div>-->
+                    <!--<div>Account Non Locked</div>-->
+                    <!--<div>Credentials Non Expired</div>-->
+                    <!--<div>Enable</div>-->
+                <!--</div>-->
+                <!--<div th:each="user, userStat : *{users}"-->
+                     <!--th:onclick="'setDataFromTableToInputs(\'' + ${user.getId()} + '\');setAuthoritie(\'' + ${user.authorities} +'\',\''+ ${roles} +  '\')'">-->
+                    <!--<div>-->
+                        <!--<input th:id="'user-id-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].id}"-->
+                               <!--class="user-table-td-input" readonly/>-->
+                    <!--</div>-->
+                    <!--<div >-->
+                        <!--<input th:id="'user-name-'+ ${user.getId()}"  th:field="*{users[__${userStat.index}__].username}"-->
+                               <!--class="user-table-td-input" readonly/>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--<input th:id="'user-email-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].mail}"-->
+                               <!--class="user-table-td-input" readonly/>-->
+                    <!--</div>-->
+                    <!--<div >-->
+                        <!--<input th:field="*{users[__${userStat.index}__].authorities}"-->
+                               <!--class="user-table-td-input" readonly/>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--<input th:id="'user-is-account-non-expired-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].accountNonExpired}"-->
+                               <!--class="user-table-td-input" readonly/>-->
+                    <!--</div>-->
+                    <!--<div >-->
+                        <!--<input th:id="'user-is-account-non-locked-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].accountNonLocked}"-->
+                               <!--class="user-table-td-input" readonly/>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--<input th:id="'user-is-credential-non-expired-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].credentialsNonExpired}"-->
+                               <!--class="user-table-td-input" readonly/>-->
+                    <!--</div>-->
+                    <!--<div >-->
+                        <!--<input th:id="'user-is-enabled-'+ ${user.getId()}" th:field="*{users[__${userStat.index}__].enabled}"-->
+                               <!--class="user-table-td-input" readonly/>-->
+                    <!--</div>-->
+                    <!--<div >-->
+                        <!--<input type="checkbox" th:field="*{users[__${userStat.index}__].del}"-->
+                               <!--class="user-table-td-input"/>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</form>-->
+<!--</div>-->
 <script>
     function setDataFromTableToInputs(value) {
         document.getElementById("user-name-input")
