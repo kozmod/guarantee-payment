@@ -9,6 +9,16 @@
           href="http://fonts.googleapis.com/css?family=PT+Sans:400,700&amp;subset=latin,cyrillic-ext">
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function($) {
+    $('.show_form').click(function(){
+         $('.add_form').fadeToggle(900);
+
+    });
+})
+</script>
+
+
 
     <!-- Viewport metatags -->
     <meta name="MobileOptimized" content="320"/>
@@ -18,8 +28,9 @@
 <!--Navigation Top Bar Start-->
 <div class="logo">
     LOGO
+    <a class="show_form" href="javascript:;" >Show</a>
 </div>
-<div class="right">
+<div class="add_form">
     <div class="navigation">
         <H2>Update or Create User</H2>
         <br>
